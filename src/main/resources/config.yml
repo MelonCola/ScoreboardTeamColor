@@ -1,0 +1,12 @@
+use:
+  color: true #Use the team color in chat
+  prefix: true #Use the team prefix in chat
+  suffix: true #Use the team suffix in chat
+separators:
+  prefix: " " #Inserted between the prefix and name if there's a prefix being added
+  suffix: " " #Inserted between the name and suffix if there's a suffix being added
+reset:
+  beforePrefix: true #Reset the color before the prefix
+  beforeName: true #Reset the color before the name
+  afterName: true #Reset the color after the name
+  afterSuffix: true #Reset the color after the suffix
