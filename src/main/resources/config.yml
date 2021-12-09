@@ -2,6 +2,7 @@ use:
   color: true #Use the team color in chat
   prefix: true #Use the team prefix in chat
   suffix: true #Use the team suffix in chat
+  format: "&r<%NAME%&r> %MESSAGE%" #Use %NAME% for name, %MESSAGE% for message, & for color codes, and &{#hexhex} for custom colors. Leave empty if using another chat plugin.
 separators:
   prefix: " " #Inserted between the prefix and name if there's a prefix being added
   suffix: " " #Inserted between the name and suffix if there's a suffix being added

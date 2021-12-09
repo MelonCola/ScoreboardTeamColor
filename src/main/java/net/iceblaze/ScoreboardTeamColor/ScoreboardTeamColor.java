@@ -1,6 +1,6 @@
 package net.iceblaze.ScoreboardTeamColor;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,10 +8,32 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 
+import java.awt.*;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ScoreboardTeamColor extends JavaPlugin implements Listener {
+    private final Pattern colorPattern = Pattern.compile("&\\{(#[0-9a-f]{3})}|&\\{(#[0-9a-f]{6})}", Pattern.CASE_INSENSITIVE);
+    private String chatFormat;
+
     public void onEnable(){
         getServer().getPluginManager().registerEvents(this, this);
         saveDefaultConfig();
+        chatFormat = ChatColor.translateAlternateColorCodes('&', convertColors(Objects.requireNonNull(getConfig().getString("use.format"))
+                .replace("%NAME%", "%1$s")
+                .replace("%MESSAGE%", "%2$s")));
+    }
+
+    String convertColors(String input) {
+        StringBuilder output = new StringBuilder();
+        Matcher matcher = colorPattern.matcher(input);
+        while (matcher.find()) {
+            String rep = String.valueOf(ChatColor.of(Color.decode(matcher.group(1) == null ? matcher.group(2): matcher.group(1))));
+            matcher.appendReplacement(output, rep);
+        }
+        matcher.appendTail(output);
+        return output.toString();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -45,5 +67,9 @@ public class ScoreboardTeamColor extends JavaPlugin implements Listener {
 
         //Update display name
         e.getPlayer().setDisplayName(displayName);
+
+        if(chatFormat.length() > 0){
+            e.setFormat(chatFormat);
+        }
     }
 }
